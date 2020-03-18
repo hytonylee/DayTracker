@@ -14,8 +14,16 @@ process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
 // @desc	 			Get users
 // @access 			Public
 
-router.get('/', (req, res) => {
-	res.json('Get Users');
+router.get('/', async (req, res) => {
+	try {
+		const users = await User.find().sort({
+			date: -1
+		});
+		res.json(users);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server Error: unable to load user data');
+	}
 });
 
 // @route  			POST api/users
@@ -48,7 +56,7 @@ router.post(
 				return res.status(400).json({ msg: 'User already exists!' });
 			}
 
-			use = new User({
+			user = new User({
 				name,
 				email,
 				password
@@ -56,7 +64,7 @@ router.post(
 
 			const salt = await bcrypt.genSalt(10);
 			user.password = await bcrypt.hash(password, salt);
-			user.id = await bcrypt.hash(id, salt);
+			// user.id = await bcrypt.hash(id, salt);
 
 			await user.save();
 
@@ -68,7 +76,7 @@ router.post(
 
 			jwt.sign(
 				payload,
-				config.get('JWT_SECRET'),
+				config.get('jwtSecret'),
 				{ expiresIn: 360000 },
 				(err, token) => {
 					if (err) throw err;
