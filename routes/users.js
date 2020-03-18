@@ -8,9 +8,19 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 
-// @route  POST api/users
-// @desc	 Register a user
-// @access Public
+process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
+
+// @routes 			api/users
+// @desc	 			Get users
+// @access 			Public
+
+router.get('/', (req, res) => {
+	res.json('Get Users');
+});
+
+// @route  			POST api/users
+// @desc	 			Register a user
+// @access 			Public
 router.post(
 	'/',
 	[
@@ -46,7 +56,7 @@ router.post(
 
 			const salt = await bcrypt.genSalt(10);
 			user.password = await bcrypt.hash(password, salt);
-			// user.id = await bcrypt.hash(id, salt);
+			user.id = await bcrypt.hash(id, salt);
 
 			await user.save();
 
@@ -73,5 +83,9 @@ router.post(
 		res.send('');
 	}
 );
+
+// @route				POST api/user/:id
+// @desc				Update Account Info
+// @access			Private
 
 module.exports = router;
