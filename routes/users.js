@@ -64,7 +64,6 @@ router.post(
 
 			const salt = await bcrypt.genSalt(10);
 			user.password = await bcrypt.hash(password, salt);
-			// user.id = await bcrypt.hash(id, salt);
 
 			await user.save();
 
@@ -76,7 +75,7 @@ router.post(
 
 			jwt.sign(
 				payload,
-				config.get('jwtSecret'),
+				config.get('jwtSecret0' || 'jwtSecret1' || 'jwtSecreet2'),
 				{ expiresIn: 360000 },
 				(err, token) => {
 					if (err) throw err;
@@ -87,13 +86,35 @@ router.post(
 			console.error(err.message);
 			res.status(500).send('Server Error!');
 		}
-
-		res.send('');
 	}
 );
 
 // @route				POST api/user/:id
 // @desc				Update Account Info
 // @access			Private
+router.put('/users/:id', auth, async (req, res) => {
+	const { name, email, password } = req.body;
+	const salt = await bcrypt.gentSalt(10);
+
+	// Build user obj
+	const userFields = {};
+	if (name) userFields.name = name;
+	if (email) userFields.email = email;
+	if (password) userFields.password = await bcrypt.hash(password, salt);
+
+	try {
+		let user = await User.findById(req.params.id);
+		if (!user) return res.status(404).json({ msg: 'User Not Found' });
+
+		use = await User.findByIdAndUpdate(
+			req.params.id,
+			{ $set: userFields },
+			{ new: true }
+		);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server Error!');
+	}
+});
 
 module.exports = router;
