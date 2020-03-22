@@ -8,12 +8,9 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 
-process.env.SUPPRESS_NO_CONFIG_WARNING = 'y';
-
 // @routes 			api/users
 // @desc	 			Get users
 // @access 			Public
-
 router.get('/', async (req, res) => {
 	try {
 		const users = await User.find().sort({
@@ -92,7 +89,7 @@ router.post(
 // @route				POST api/user/:id
 // @desc				Update Account Info
 // @access			Private
-router.put('/users/:id', auth, async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
 	const { name, email, password } = req.body;
 	const salt = await bcrypt.gentSalt(10);
 
