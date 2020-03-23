@@ -18,6 +18,9 @@ const EntrySchema = mongoose.Schema({
 		default: false,
 		required: true
 	},
+	memo: {
+		type: String
+	},
 	date: {
 		type: Date,
 		default: Date.now()
