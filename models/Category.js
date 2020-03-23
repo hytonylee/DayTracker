@@ -9,6 +9,9 @@ const CategoryScehma = monogoose.Schema({
 		type: String,
 		required: true
 	},
+	icon: {
+		type: String
+	},
 	date: {
 		type: Date,
 		default: Date.now
