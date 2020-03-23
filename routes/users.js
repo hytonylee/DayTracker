@@ -72,7 +72,8 @@ router.post(
 
 			jwt.sign(
 				payload,
-				config.get('jwtSecret0' || 'jwtSecret1' || 'jwtSecreet2'),
+				process.env.JWT_SECRET,
+				// config.get('jwtSecret0' || 'jwtSecret1' || 'jwtSecreet2')
 				{ expiresIn: 360000 },
 				(err, token) => {
 					if (err) throw err;

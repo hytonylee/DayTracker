@@ -1,8 +1,8 @@
-const monogoose = require('mongoose');
+const mongoose = require('mongoose');
 
-const CategoryScehma = monogoose.Schema({
+const CategoryScehma = mongoose.Schema({
 	user: {
-		type: monogoose.Schema.Types.ObjectId,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'users'
 	},
 	title: {

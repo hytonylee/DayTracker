@@ -16,8 +16,10 @@ app.get('/', (req, res) => {
 
 // Define Routes
 app.use('/api/users', require('./routes/users'));
-// app.use('/api/auth', require('./routes/auth'));
-app.use('/api/task', require('./routes/tasks'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/tasks', require('./routes/tasks'));
+app.use('/api/categories', require('./routes/categories'));
+app.use('/api/entries', require('./routes/entries'));
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Servert started at the port ${PORT}`));
+app.listen(PORT, () => console.log(`Server started at the port ${PORT}`));
