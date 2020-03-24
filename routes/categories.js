@@ -9,7 +9,7 @@ const Category = require('../models/Category');
 // @access    Private
 router.get('/', auth, async (req, res) => {
 	try {
-		const categories = await Category.find({ user: req.user.id })
+		const categories = await Category.find()
 			.find()
 			.sort({ date: -1 });
 		res.json(categories);
@@ -78,6 +78,22 @@ router.put('/:id', auth, async (req, res) => {
 	} catch (err) {
 		console.error(err.message);
 		res.status(500).send('Category Update Error!');
+	}
+});
+
+// @route  Delete api/:id
+// @desc   Delete category
+// @access Private
+router.delete('/:id', auth, async (req, res) => {
+	try {
+		let category = await Category.findById(req.params.id);
+		if (!category) return res.status(404).json({ msg: 'Category Not Found' });
+
+		await Category.findByIdAndRemove(req.params.id);
+		res.json({ msg: 'Category has been removed!' });
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Server Error: Unable to Delete!');
 	}
 });
 
