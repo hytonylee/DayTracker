@@ -48,12 +48,37 @@ router.post(
 			});
 
 			const category = await newCategory.save();
-			res.json(category);
+			res.json({ message: 'Category Save Success!' } + category);
 		} catch (error) {
 			console.error(error.message);
 			res.status(500).send('Unable to Save the Category!');
 		}
 	}
 );
+
+// @route			Put api/categories/:id
+// @desc			Update a category
+// @access		Private
+router.put('/:id', auth, async (req, res) => {
+	const { title, icon } = req.body;
+	const categoryFields = {};
+	if (title) categoryFields.title = title;
+	if (icon) categoryFields.icon = icon;
+
+	try {
+		let category = await Category.findById(req.params.id);
+		if (!category) return res.json({ msg: 'Category Not Found!' });
+
+		category = await Category.findByIdAndUpdate(
+			req.params.id,
+			{ $set: categoryFields },
+			{ new: true }
+		);
+		res.json(category);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('Category Update Error!');
+	}
+});
 
 module.exports = router;
