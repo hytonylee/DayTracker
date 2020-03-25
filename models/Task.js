@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Category = require('../models/Category');
 
 const TaskSchema = mongoose.Schema({
 	user: {
@@ -6,24 +7,25 @@ const TaskSchema = mongoose.Schema({
 		ref: 'users'
 	},
 	category: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'categories'
+		type: String,
+		default: Category.schema.path('title').path,
+		require: true
 	},
 	title: {
 		type: String,
 		require: true
 	},
 	memo: {
-		type: String,
-		required: true
+		type: String
 	},
-	display: {
-		type: String,
-		required: true
+	rate: {
+		type: Number,
+		require: true
 	},
 	duration: {
 		type: String,
 		enum: ['Daily', 'Weekly', 'Monthly'],
+		default: 'Daily',
 		require: true
 	},
 	date: {
